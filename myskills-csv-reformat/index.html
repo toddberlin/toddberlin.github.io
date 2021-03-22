@@ -118,10 +118,7 @@
     }
 
     function onReaderLoad(event){
-      console.log(event.target.result);
       var obj = JSON.parse(event.target.result);
-      //alert_data(obj.name, obj.family);
-      //console.log(obj);
       generateOutput(obj);
     }
 
