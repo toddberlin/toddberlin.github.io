@@ -1,8 +1,17 @@
 body {
   padding:10px;
+  font-family:Helvetica, Arial, sans-serif
 }
 
+.body-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/*
 input[type=textarea] {
   width:100%;
   min-height:100px;
 }
+*/

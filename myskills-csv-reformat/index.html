@@ -12,22 +12,22 @@
 </head>
 
 <body>
+  <div class="body-wrapper">
     <p>MUST USE CHROME - NOT INTERNET EXPLORER</p>
-  <ol>
     <li>export all WTS report
+    <ol>
+      <li>export all WTS report
         from TQ1</a></li>
-    <li>upload to <a target="_blank" href="https://www.convertcsv.com/csv-to-json.htm">convertcsv.com</a>, then click
-      'Download Result'</li>
-    <li>Upload below to have the converted file downloaded for review and upload to MySkills</li>
-  </ol>
-  <p>&nbsp;</p>
+      <li>upload to <a target="_blank" href="https://www.convertcsv.com/csv-to-json.htm">convertcsv.com</a>, then click
+        'Download Result'</li>
+      <li>Upload below to have the converted file downloaded for review and upload to MySkills</li>
+    </ol>
+    <p>&nbsp;</p>
 
-  <p>Upload your JSON file here: </p>
-  <input id="fileItem" type="file" accept="json">
+    <p>Upload your JSON file here: </p>
+    <input id="fileItem" type="file" accept="json">
 
-<!--  <p>&nbsp;</p>
-  <button onclick="generateOutput()">Download MySkills CSV for upload</button>
-  -->
+  </div>
   <script>
     function generateOutput(uploadedData) {
 
@@ -117,7 +117,7 @@
       reader.readAsText(event.target.files[0]);
     }
 
-    function onReaderLoad(event){
+    function onReaderLoad(event) {
       var obj = JSON.parse(event.target.result);
       generateOutput(obj);
     }
