@@ -4,7 +4,9 @@ var mySkillsModes = [ // online, offsite, block
     ["Block training"]
 ];
 
-var mySkillsLocations = [ //this is from MySkills
+var mySkillsWorkloads = [ "Part time", "Self-paced" ];
+
+var mySkillsLocations = [ //this order is from MySkills - text match exactly to TQOne values
     "Acacia Ridge",
     "Aitkenvale",
     "Alexandra Hills",
@@ -14,11 +16,11 @@ var mySkillsLocations = [ //this is from MySkills
     "Bracken Ridge",
     "Browns Plains",
     "Bundaberg",
-    "Bundamba",
+    "Ipswich",
     "Burdekin",
-    "Caboolture ",
+    "Caboolture",
     "Cairns",
-    "Cairns - Great Barrier Reef International Marine College",
+    "Great Barrier Reef International Marine College",
     "Charters Towers",
     "Chinchilla",
     "Cloncurry",
@@ -37,7 +39,7 @@ var mySkillsLocations = [ //this is from MySkills
     "Maroochydore",
     "Maryborough",
     "Mooloolaba",
-    "Mount Gravatt ",
+    "Mt Gravatt",
     "Mount Isa",
     "Nambour",
     "Normanton",
@@ -45,14 +47,14 @@ var mySkillsLocations = [ //this is from MySkills
     "Palm Island",
     "Redcliffe",
     "Roma",
-    "Southbank",
+    "South Bank",
     "Southport",
     "Springfield",
-    "The Whitsundays",
+    "Whitsundays (Cannonvale)",
     "Thursday Island",
     "Toowoomba",
-    "Townsville",
-    "Trade Training Centre",
+    "Townsville (Pimlico)",
+    "Townsville (Trade Training Centre Bohle)",
     "Warwick"
 ];
 
