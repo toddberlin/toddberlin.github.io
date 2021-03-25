@@ -88,7 +88,7 @@ function generateCSVFile(data) {
     
   });
 
-  console.log(csv);
+  // console.log(csv);
 
   var hiddenElement = document.createElement('a');
   hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
