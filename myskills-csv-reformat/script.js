@@ -62,7 +62,7 @@ function generateCSVFile(data) {
       var workloadMatch = function (el) {
         return course["workload"].includes(el);
       };
-      if (mySkillsWorkloads.some(workloadMatch)) {
+      if (!mySkillsWorkloads.some(workloadMatch)) {
         workloadSelection += '"Y",';
       } else {
         workloadSelection += '"N",';

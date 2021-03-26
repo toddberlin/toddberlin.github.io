@@ -4,7 +4,7 @@ var mySkillsModes = [ // online, offsite, block
     ["Block training"]
 ];
 
-var mySkillsWorkloads = [ "Part time", "Self-paced" ];
+var mySkillsWorkloads = [ "Full time" ];
 
 var mySkillsLocations = [ //this order is from MySkills - text match exactly to TQOne values
     "Acacia Ridge",
