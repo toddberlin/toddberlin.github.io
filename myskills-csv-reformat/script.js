@@ -17,7 +17,7 @@ function generateOutput(uploadedData) {
     var levelsReg = /^(?!(NONAC|SS|UNL|Units from |UNILEARN).*$).*/;
 
     // filter quals 
-    if (levelsReg.test(courseCode) && !courseTitle.includes('Degree') && !courseTitle.includes('Bachelor') ) { 
+    if (levelsReg.test(courseCode) /*&& !courseTitle.includes('Degree')*/ && !courseTitle.includes('Bachelor') ) { 
       if (mySkillsOutput.find(o => o["course code"] === courseCode)) { // check for existing ones
         var existingCourse = mySkillsOutput.find(o => o["course code"] === courseCode);
         if (!existingCourse.locations.includes(courseLocation)) {
