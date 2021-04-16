@@ -14,10 +14,10 @@ function generateOutput(uploadedData) {
     var courseLocation = source[i]["Location"];
     var courseStudyMode = source[i]["Study Mode"];
     var courseURL = `https://tafeqld.edu.au/courses/${courseID}/${courseTitleURL}`;
-    //console.log(courseURL);
     var levelsReg = /^(?!(NONAC|SS|UNL|Units from |UNILEARN).*$).*/;
 
-    if (levelsReg.test(courseCode)) { // filter quals
+    // filter quals 
+    if (levelsReg.test(courseCode) && !courseTitle.includes('Degree') && !courseTitle.includes('Bachelor') ) { 
       if (mySkillsOutput.find(o => o["course code"] === courseCode)) { // check for existing ones
         var existingCourse = mySkillsOutput.find(o => o["course code"] === courseCode);
         if (!existingCourse.locations.includes(courseLocation)) {
