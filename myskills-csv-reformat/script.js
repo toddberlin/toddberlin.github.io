@@ -14,7 +14,7 @@ function generateOutput(uploadedData) {
     var courseLocation = source[i]["Location"];
     var courseStudyMode = source[i]["Study Mode"];
     var courseURL = `https://tafeqld.edu.au/courses/${courseID}/${courseTitleURL}`;
-    var levelsReg = /^(?!(NONAC|SS|UNL|Units from |UNILEARN).*$).*/;
+    var levelsReg = /^(?!(MCC|NONAC|SS|UNL|Units from |UNILEARN).*$).*/;
 
     // filter quals 
     if (levelsReg.test(courseCode) && !courseTitle.includes('Associate Degree') && !courseTitle.includes('Bachelor') ) { 
