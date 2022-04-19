@@ -7,7 +7,7 @@ function generateOutput(uploadedData) {
   for (var i = 0; i < source.length; i++) { //
     var courseCode = source[i]["Course Code"];
     var courseID = source[i]["Course ID"];
-    var courseFolder = courseID.slice(0, 2);
+    var courseFolder = courseID.toString().slice(0, 2);
     var courseTitle = source[i]["Course Title"];
     var courseWorkload = source[i]["Workload"];
     var courseTitleURL = courseTitle.toLowerCase().replace(/(\(|\)|,|\.|\/|\[|\])/g, '').replace(/\s+/g, "-")
