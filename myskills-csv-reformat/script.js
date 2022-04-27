@@ -10,6 +10,8 @@ function generateOutput(uploadedData) {
     var courseFolder = courseID.toString().slice(0, 2);
     var courseTitle = source[i]["Course Title"];
     var courseWorkload = source[i]["Workload"];
+    var courseFullFee = source[i]["Full fee"] || "0";
+    // console.log(courseFullFee);
     var courseTitleURL = courseTitle.toLowerCase().replace(/(\(|\)|,|\.|\/|\[|\])/g, '').replace(/\s+/g, "-")
       .replace(/-+/g, "-"); //
     var courseLocation = source[i]["Location"];
@@ -34,7 +36,8 @@ function generateOutput(uploadedData) {
           "course url": courseURL,
           "workload": courseWorkload,
           "locations": [courseLocation],
-          "study modes": [courseStudyMode]
+          "study modes": [courseStudyMode],
+          "full fee": courseFullFee
         });
       }
     }
@@ -83,7 +86,7 @@ function generateCSVFile(data) {
     });
 
     var addLine =
-      `"${course['course code']}","0","","",${workloadSelection}${studymodeSelection}"","${offeredHeadOffice}",${locationSelection}"${course['course url']}"\n`;
+      `"${course['course code']}",${course['full fee']},"","",${workloadSelection}${studymodeSelection}"","${offeredHeadOffice}",${locationSelection}"${course['course url']}"\n`;
 
     csv += addLine;
     
