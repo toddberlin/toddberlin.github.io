@@ -1,6 +1,6 @@
 function generateOutput(uploadedData) {
 
-  var mySkillsOutput = [];
+  var mySkillsOutput = []; // data built in this to pass to csv generator
   var source = uploadedData;
   var outputDiv = document.getElementById("csv-data");
 
@@ -10,20 +10,26 @@ function generateOutput(uploadedData) {
     var courseFolder = courseID.toString().slice(0, 2);
     var courseTitle = source[i]["Course Title"];
     var courseWorkload = source[i]["Workload"];
-    var courseFullFee = source[i]["Full fee"] || "0";
-    // console.log(courseFullFee);
+    var thisFullFee = parseInt(source[i]["Full fee"]) || 0;
     var courseTitleURL = courseTitle.toLowerCase().replace(/(\(|\)|,|\.|\/|\[|\])/g, '').replace(/\s+/g, "-")
       .replace(/-+/g, "-"); //
     var courseLocation = source[i]["Location"];
     var courseStudyMode = source[i]["Study Mode"];
     var courseURL = `https://tafeqld.edu.au/course/${courseFolder}/${courseID}/${courseTitleURL}`;
     var levelsReg = /^(?!(MCC|NONAC|SS|UNL|Units from |UNILEARN).*$).*/;
+    var wtsPublish = source[i]["Publish"] == "Yes";
 
     // filter quals 
-    if (levelsReg.test(courseCode) && !courseTitle.includes('Associate Degree') && !courseTitle.includes('Bachelor') && !courseCode.includes('/') ) { 
-      if (mySkillsOutput.find(o => o["course code"] === courseCode)) { // check for existing ones
-        var existingCourse = mySkillsOutput.find(o => o["course code"] === courseCode);
-        if (!existingCourse.locations.includes(courseLocation)) {
+    if (levelsReg.test(courseCode) && wtsPublish && !courseTitle.includes('Associate Degree') && !courseTitle.includes('Bachelor') && !courseCode.includes('/') ) { 
+    //  if(courseCode == "AHC20416") {
+      if (mySkillsOutput.find(o => o["course code"] === courseCode)) { // check for existing ones 
+        var existingCourse = mySkillsOutput.find(o => o["course code"] === courseCode); 
+        var existingFullFee = parseInt(existingCourse["full fee"]);
+
+        if (thisFullFee > existingFullFee) {
+          existingCourse["full fee"] = thisFullFee;
+        } 
+        if (!existingCourse.locations.includes(courseLocation)) { //pushes location only hasn't already been added 
           existingCourse.locations.push(courseLocation)
         }
         if (!existingCourse["study modes"].includes(courseStudyMode)) {
@@ -37,10 +43,11 @@ function generateOutput(uploadedData) {
           "workload": courseWorkload,
           "locations": [courseLocation],
           "study modes": [courseStudyMode],
-          "full fee": courseFullFee
+          "full fee": thisFullFee
         });
       }
     }
+    // console.log(mySkillsOutput);
   }
   generateCSVFile(mySkillsOutput);
 }
