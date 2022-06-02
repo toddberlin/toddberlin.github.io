@@ -29,7 +29,7 @@
   <p>Add this to the bottom of the velocity script token:</p>
   <p><pre><code>#set ( $output = "" )
   #foreach( $employer in $employerData )
-    #if( $lead.Email Address.toString().equals($employer.Email) )
+    #if( $lead.Email.toString().equals($employer.Email) )
       #foreach( $apprentice in $employer.Apprentices )
         #set ( $output = "${output}&lt;p&gt;&lt;strong&gt;Student name:&lt;/strong&gt; ${apprentice.name}&lt;/p&gt;&lt;p&gt;Outstanding units: &lt;/p&gt;&lt;ul&gt;" )
         #foreach( $unit in $apprentice.units )
