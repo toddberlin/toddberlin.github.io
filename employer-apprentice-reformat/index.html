@@ -23,9 +23,30 @@
       <li>Upload the JSON file below to have the converted data output below and highlighted for copying into Marketos</li>
     </ol>
 <div class="jumbotron">
-    <p>Upload your JSON file here: </p>
-    <input id="fileItem" type="file" accept="json">
-  </div>
+  <p>Upload your JSON file here: </p>
+  <input id="fileItem" type="file" accept="json">
+  <p>&nbsp;</p>
+  <p>Add this to the bottom of the velocity script token:</p>
+  <p><pre><code>#set ( $output = "" )
+  #foreach( $employer in $employerData )
+    #if( $lead.Email Address.toString().equals($employer.Email) )
+      #foreach( $apprentice in $employer.Apprentices )
+        #set ( $output = "${output}&lt;p&gt;&lt;strong&gt;Student name:&lt;/strong&gt; ${apprentice.name}&lt;/p&gt;&lt;p&gt;Outstanding units: &lt;/p&gt;&lt;ul&gt;" )
+        #foreach( $unit in $apprentice.units )
+          #set ( $unitTitle = "")
+          #foreach( $unitItem in $allUnits)
+            #if ( $unit.toString().equals($unitItem.code) ) 
+              #set ( $unitTitle = "${unitItem.title}")
+            #end
+          #end
+          #set ( $output = "${output}&lt;li&gt;${unit}: ${unitTitle}&lt;/li&gt;" )
+        #end
+        #set ( $output = "${output}&lt;/ul&gt;&lt;br&gt;" )
+      #end
+    #end
+  #end
+  $output##</code></pre></p>
+</div>
 <p>Output:</p>
   <div class="jumbotron" id="velocity-output">
   </div>

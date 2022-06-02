@@ -23,7 +23,9 @@ code {
   color: #3d4083;
   font-family: courier;
 }
-
+ pre code {
+  background-color: #cdcdcd;
+ }
 
 
 @media (min-width: 576px) {
