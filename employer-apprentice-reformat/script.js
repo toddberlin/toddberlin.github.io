@@ -1,11 +1,31 @@
 var inputElement = document.getElementById('fileItem');
 var outputDiv = document.getElementById("velocity-output");
 
-function outputToDom(refactoredData) {
-  outputDiv.innerText = JSON.stringify(refactoredData, null, 2);
+function outputToDom(refactoredData, referenceList) {
+  var unitsRefOutput = JSON.stringify(referenceList, null, 2);
+  var objectOutput= JSON.stringify(refactoredData, null, 2);
+  outputDiv.innerText = "#set( $allUnits = " + unitsRefOutput + " ) \n"+ "#set( $employerData = " + objectOutput + " )";
+
+  function selectElementText(el, win) {
+    win = win || window;
+    var doc = win.document, sel, range;
+    if (win.getSelection && doc.createRange) {
+        sel = win.getSelection();
+        range = doc.createRange();
+        range.selectNodeContents(el);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } else if (doc.body.createTextRange) {
+        range = doc.body.createTextRange();
+        range.moveToElementText(el);
+        range.select();
+    }
+  }
+  selectElementText(outputDiv);
 }
 
 function generateOutput(data) {
+  var unitsSummary = [];
   var velOutput = [];
 
   for (var i = 0; i < data.length; i++) { // looping through all uploaded data
@@ -13,8 +33,6 @@ function generateOutput(data) {
     var apprentice = data[i]["Student Name"];
     var unitCode = data[i]["Unit Code"];
     var unitTitle = data[i]["Unit Study Package Full Title"];
-
-//    velOutput += `${empEmail} ${apprentice} ${unitCode} ${unitTitle}`;
 
     if (velOutput.find(o => o["Email"] === empEmail)) { // check for existing emplployers 
       var existingEmployer = velOutput.find(o => o["Email"] === empEmail); 
@@ -35,8 +53,16 @@ function generateOutput(data) {
         }]
       });
     }
+
+    if (!unitsSummary.find(o => o["code"] === unitCode)) { // add unit to unitsSummary if not exists
+      unitsSummary.push({
+        "code": unitCode,
+        "title": unitTitle
+      });
+    }
+
   }
-  outputToDom(velOutput);
+  outputToDom(velOutput, unitsSummary);
 }
 
 
