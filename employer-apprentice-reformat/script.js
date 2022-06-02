@@ -22,6 +22,8 @@ function outputToDom(refactoredData, referenceList) {
     }
   }
   selectElementText(outputDiv);
+  outputDiv.scrollIntoView();
+
 }
 
 function generateOutput(data) {
