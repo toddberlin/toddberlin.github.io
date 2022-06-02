@@ -28,24 +28,24 @@
   <p>&nbsp;</p>
   <p>Add this to the bottom of the velocity script token:</p>
   <p><pre><code>#set ( $output = "" )
-  #foreach( $employer in $employerData )
-    #if( $lead.Email.toString().equals($employer.Email) )
-      #foreach( $apprentice in $employer.Apprentices )
-        #set ( $output = "${output}&lt;p&gt;Student name: &lt;strong&gt;${apprentice.name}&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Outstanding units: &lt;/p&gt;&lt;ul&gt;" )
-        #foreach( $unit in $apprentice.units )
-          #set ( $unitTitle = "")
-          #foreach( $unitItem in $allUnits)
-            #if ( $unit.toString().equals($unitItem.code) ) 
-              #set ( $unitTitle = "${unitItem.title}")
-            #end
+#foreach( $employer in $employerData )
+  #if( $lead.Email.toString().equals($employer.Email) )
+    #foreach( $apprentice in $employer.Apprentices )
+      #set ( $output = "${output}&lt;p&gt;Student name: &lt;strong&gt;${apprentice.name}&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Outstanding units: &lt;/p&gt;&lt;ul&gt;" )
+      #foreach( $unit in $apprentice.units )
+        #set ( $unitTitle = "")
+        #foreach( $unitItem in $allUnits)
+          #if ( $unit.toString().equals($unitItem.code) ) 
+            #set ( $unitTitle = "${unitItem.title}")
           #end
-          #set ( $output = "${output}&lt;li&gt;${unit}: ${unitTitle}&lt;/li&gt;" )
         #end
-        #set ( $output = "${output}&lt;/ul&gt;&lt;br&gt;" )
+        #set ( $output = "${output}&lt;li&gt;${unit}: ${unitTitle}&lt;/li&gt;" )
       #end
+      #set ( $output = "${output}&lt;/ul&gt;&lt;br&gt;" )
     #end
   #end
-  $output##</code></pre></p>
+#end
+$output##</code></pre></p>
 </div>
 <p>Output:</p>
   <div class="jumbotron" id="velocity-output">
