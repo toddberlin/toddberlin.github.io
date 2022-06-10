@@ -122,7 +122,7 @@ function generateOutput(uploadedData) {
     scrollX: true
   } );
   
-  //generateCSVFile(mySkillsOutput);
+  generateCSVFile(mySkillsOutput);
 }
 
 function generateCSVFile(data) {
