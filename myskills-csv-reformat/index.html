@@ -11,6 +11,14 @@
   <link rel="stylesheet" href="style-MS.css">
   <script src="output-table-reference.js" async></script>
   <link rel="shortcut icon" type="image/jpg" href="/./favicon.ico" />
+  <script src="jquery-3.6.0.min.js" ></script>
+
+  <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" ></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css"/>
+ 
+  <script type="text/javascript" src="DataTables/datatables.min.js"></script>
+
 
 </head>
 
@@ -28,7 +36,6 @@
     <input id="fileItem" type="file" accept="json">
   </div>
   <p>&nbsp;</p>
-  <p>&nbsp;</p>
   <p>Excludes: </p>
   <ul>
     <li>duals</li>
@@ -37,7 +44,10 @@
     <li>skill sets</li>
     <li>Unilearn</li>
   </ul>
-
+  <p>&nbsp;</p>
+  <p>Duals & Triples: </p>
+  <div class="jumbotron" id="duals-output">
+  </div>
 
   </div>
 

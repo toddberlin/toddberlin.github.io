@@ -1,6 +1,9 @@
 function generateOutput(uploadedData) {
 
   var mySkillsOutput = []; // data built in this to pass to csv generator
+  var dualQualsExcluded = []; // data added here for duals and triples to alert the user
+  let myTable = document.querySelector('#duals-output');
+  let tHeaders = ["Course code", "Course title", "Course url", "Workload", "Locations", "Study modes", "Full fee"];
   var source = uploadedData;
   var outputDiv = document.getElementById("csv-data");
 
@@ -46,9 +49,63 @@ function generateOutput(uploadedData) {
           "full fee": thisFullFee
         });
       }
+    } else if (courseCode.includes('/')) {
+      if (dualQualsExcluded.find(o => o["course code"] === courseCode)) { // check for existing ones 
+        var existingCourse = dualQualsExcluded.find(o => o["course code"] === courseCode); 
+        var existingFullFee = parseInt(existingCourse["full fee"]);
+
+        if (thisFullFee > existingFullFee) {
+          existingCourse["full fee"] = thisFullFee;
+        } 
+        if (!existingCourse.locations.includes(courseLocation)) { //pushes location only hasn't already been added 
+          existingCourse.locations.push(courseLocation)
+        }
+        if (!existingCourse["study modes"].includes(courseStudyMode)) {
+          existingCourse["study modes"].push(courseStudyMode);
+        }
+      } else { // add new one if not
+        dualQualsExcluded.push({
+          "course code": courseCode,
+          "course title": courseTitle,
+          "course url": courseURL,
+          "workload": courseWorkload,
+          "locations": [courseLocation],
+          "study modes": [courseStudyMode],
+          "full fee": thisFullFee
+        });
+      }
     }
-    // console.log(mySkillsOutput);
+    
   }
+  console.log(dualQualsExcluded);
+  
+  let table = document.createElement('table');
+  table.setAttribute("id", "duals-output-table");
+  let headerRow = document.createElement('tr');
+
+  tHeaders.forEach(headerText => {
+    let header = document.createElement('th');
+    let textNode = document.createTextNode(headerText);
+    header.appendChild(textNode);
+    headerRow.appendChild(header);
+  });
+  table.appendChild(headerRow);
+
+  dualQualsExcluded.forEach(course => {
+    let row = document.createElement('tr');
+    Object.values(course).forEach(text => {
+      let cell = document.createElement('td');
+      let textNode = document.createTextNode(text);
+      cell.appendChild(textNode);
+      row.appendChild(cell);
+    })
+    table.appendChild(row);
+  });
+  myTable.appendChild(table);
+
+  $(document).ready( function () {
+    $('#duals-output-table').DataTable();
+  } );
   generateCSVFile(mySkillsOutput);
 }
 
