@@ -15,3 +15,23 @@ input[type=textarea] {
   min-height:100px;
 }
 */
+
+#duals-output {
+  width:100%;
+  overflow: scroll;
+}
+
+@media (min-width: 576px) {
+.jumbotron {
+    padding: 2rem 2rem;
+}
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+  padding: .3rem;
+
+}
+
+#duals-output table {
+  font-size: .8rem;
+}

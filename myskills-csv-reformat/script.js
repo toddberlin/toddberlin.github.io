@@ -33,7 +33,7 @@ function generateOutput(uploadedData) {
           existingCourse["full fee"] = thisFullFee;
         } 
         if (!existingCourse.locations.includes(courseLocation)) { //pushes location only hasn't already been added 
-          existingCourse.locations.push(courseLocation)
+          existingCourse.locations.push(courseLocation);
         }
         if (!existingCourse["study modes"].includes(courseStudyMode)) {
           existingCourse["study modes"].push(courseStudyMode);
@@ -58,7 +58,7 @@ function generateOutput(uploadedData) {
           existingCourse["full fee"] = thisFullFee;
         } 
         if (!existingCourse.locations.includes(courseLocation)) { //pushes location only hasn't already been added 
-          existingCourse.locations.push(courseLocation)
+          existingCourse.locations.push(courseLocation);
         }
         if (!existingCourse["study modes"].includes(courseStudyMode)) {
           existingCourse["study modes"].push(courseStudyMode);
@@ -77,10 +77,11 @@ function generateOutput(uploadedData) {
     }
     
   }
-  console.log(dualQualsExcluded);
-  
+  //console.log(dualQualsExcluded);
+  /*
   let table = document.createElement('table');
   table.setAttribute("id", "duals-output-table");
+  let theadEl = document.createElement('thead');
   let headerRow = document.createElement('tr');
 
   tHeaders.forEach(headerText => {
@@ -101,11 +102,25 @@ function generateOutput(uploadedData) {
     })
     table.appendChild(row);
   });
-  myTable.appendChild(table);
-
-  $(document).ready( function () {
-    $('#duals-output-table').DataTable();
+  myTable.appendChild(table);*/
+  $('#duals-output-table').DataTable( {
+    data: dualQualsExcluded,
+    responsive: true,
+    columns: [
+      { data: 'course code', title: "Course code" },
+      { data: 'course title', title: "Course title" },
+      { data: 'course url', title: "Course URL" },
+      { data: 'workload', title: "Workload" },
+      { data: 'locations', title: "Locations" },
+      { data: 'study modes', title: "Study modes" },
+      { data: 'full fee', title: "Highest full fee" }
+    ],
+    paging: false,
+    searching: false,
+    scrollY: 600,
+    scrollX: true
   } );
+  
   generateCSVFile(mySkillsOutput);
 }
 

@@ -8,8 +8,6 @@
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <link rel="stylesheet" href="style-MS.css">
-  <script src="output-table-reference.js" async></script>
   <link rel="shortcut icon" type="image/jpg" href="/./favicon.ico" />
   <script src="jquery-3.6.0.min.js" ></script>
 
@@ -18,6 +16,9 @@
   <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css"/>
  
   <script type="text/javascript" src="DataTables/datatables.min.js"></script>
+  <link rel="stylesheet" href="style-MS.css">
+  <script src="output-table-reference.js" async></script>
+
 
 
 </head>
@@ -35,10 +36,9 @@
     <p>Upload your JSON file here: </p>
     <input id="fileItem" type="file" accept="json">
   </div>
-  <p>&nbsp;</p>
   <p>Excludes: </p>
   <ul>
-    <li>duals</li>
+    <li>duals <em>(see below)</em></li>
     <li>short courses and micro credentials</li>
     <li>degrees and bachelors</li>
     <li>skill sets</li>
@@ -47,6 +47,7 @@
   <p>&nbsp;</p>
   <p>Duals & Triples: </p>
   <div class="jumbotron" id="duals-output">
+    <table id="duals-output-table" class="stripe"></table>
   </div>
 
   </div>
