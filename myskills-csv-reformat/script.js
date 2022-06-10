@@ -116,9 +116,12 @@ function generateOutput(uploadedData) {
       { data: 'full fee', title: "Highest full fee" }
     ],
     paging: false,
-    searching: false,
+    //searching: false,
     scrollY: 600,
-    scrollX: true
+    scrollX: true,
+    buttons: [
+       'copy'
+    ]
   } );
   
   generateCSVFile(mySkillsOutput);
