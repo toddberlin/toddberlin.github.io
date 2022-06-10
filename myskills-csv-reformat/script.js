@@ -115,16 +115,14 @@ function generateOutput(uploadedData) {
       { data: 'study modes', title: "Study modes" },
       { data: 'full fee', title: "Highest full fee" }
     ],
+    buttons: ['copyHtml5'],
     paging: false,
-    //searching: false,
+    searching: false,
     scrollY: 600,
-    scrollX: true,
-    buttons: [
-       'copy'
-    ]
+    scrollX: true
   } );
   
-  generateCSVFile(mySkillsOutput);
+  //generateCSVFile(mySkillsOutput);
 }
 
 function generateCSVFile(data) {
