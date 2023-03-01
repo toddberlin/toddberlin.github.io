@@ -102,3 +102,25 @@ document.getElementById('the_form_submit').addEventListener('click', () => {
     }
   });
 });
+
+/**************** auto select */
+function SelectText(element) {
+  var text = element,
+      range,
+      selection;
+  if (document.body.createTextRange) {
+      range = document.body.createTextRange();
+      range.moveToElementText(text);
+      range.select();
+  } else if (window.getSelection) {
+      selection = window.getSelection();        
+      range = document.createRange();
+      range.selectNodeContents(text);
+      selection.removeAllRanges();
+      selection.addRange(range);
+  }
+}
+
+document.querySelector('.autoselect').addEventListener('click', function() {
+  SelectText(this);
+});

@@ -35,7 +35,7 @@
       <p>&nbsp;</p>
       <p>Add this to the bottom of the velocity script token:</p>
       <p>
-        <pre><code>#set ( $output = "" )
+        <pre><code class="autoselect">#set ( $output = "" )
 #foreach( $employer in $employerData )
   #if( $lead.Email.toString().equals($employer.Email) )
     #foreach( $apprentice in $employer.Apprentices )
