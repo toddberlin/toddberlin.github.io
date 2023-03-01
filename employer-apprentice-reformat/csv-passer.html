@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Javascript CSV parser with HTML5 File Reader</title>
+
+</head>
+
+<body>
+  <div id="wrap">
+    <h1>HTML5 and Javascript CSV Parser</h1>
+    <form action="javascript:void(0);" id="the_form">
+      <input type="file" id="the_file" required="required" accept=".csv" />
+      <input type="submit" value="Go" class="btn" />
+    </form>
+    <div id="file_info"></div>
+    <div id="list"></div>
+  </div>
+
+
+
+  
+  <script type="text/javascript">
+    function fileInfo(e) {
+      var file = e.target.files[0];
+      if (file.name.split(".")[1].toUpperCase() != "CSV") {
+        alert('Invalid csv file !');
+        e.target.parentNode.reset();
+        return;
+      } else {
+        document.getElementById('file_info').innerHTML = "<p>File Name: " + file.name + " | " + file.size +
+          " Bytes.</p>";
+      }
+    }
+
+    function handleFileSelect() {
+      var file = document.getElementById("the_file").files[0];
+      var reader = new FileReader();
+      var link_reg = /(http:\/\/|https:\/\/)/i;
+      reader.onload = function (file) {
+        var content = file.target.result;
+        var rows = file.target.result.split(/[\r\n|\n]+/);
+        var table = document.createElement('table');
+
+        for (var i = 0; i < rows.length; i++) {
+          var tr = document.createElement('tr');
+          var arr = rows[i].split(',');
+
+          for (var j = 0; j < arr.length; j++) {
+            if (i == 0)
+              var td = document.createElement('th');
+            else
+              var td = document.createElement('td');
+
+            if (link_reg.test(arr[j])) {
+              var a = document.createElement('a');
+              a.href = arr[j];
+              a.target = "_blank";
+              a.innerHTML = arr[j];
+              td.appendChild(a);
+            } else {
+              td.innerHTML = arr[j];
+            }
+            tr.appendChild(td);
+          }
+
+          table.appendChild(tr);
+        }
+
+        document.getElementById('list').appendChild(table);
+      };
+      reader.readAsText(file);
+    }
+    document.getElementById('the_form').addEventListener('submit', handleFileSelect, false);
+    document.getElementById('the_file').addEventListener('change', fileInfo, false);
+  </script>
+
+</body>
+
+</html>
