@@ -1,0 +1,77 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Next intake tool</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="style.css">
+  <!-- <script src="output-table-reference.js" async></script> -->
+  <link rel="shortcut icon" type="image/jpg" href="/./favicon.ico" />
+
+</head>
+
+<body>
+  <div class="body-wrapper">
+    <h3>Use Chrome, not IE</h3>
+    <ol>
+      <li>The lead data csv should have the following column headings: <code>Email</code>, <code>First
+          Name</code>, <code>Study mode</code>, <code>Region</code>, <code>Campus</code>, <code>Course name</code>, <code>Course code</code>, <code>TQOne ID</code></li>
+      <li>Upload the both files below to have the resulting data downloaded automatically.
+      </li>
+    </ol>
+    <div class="jumbotron">
+      <p><strong>Upload your data here: </strong></p>
+      <form action="javascript:void(0);" id="the_form">
+        <div>
+          <label for="the_file">Lead data csv:</label>
+          <input type="file" id="the_file" required="required" accept=".csv" />
+        </div>
+        <div>
+          <label for="the_course_data">Course data csv (wts report):</label>
+          <input type="file" id="the_course_data" required="required" accept=".csv" />
+        </div>
+
+        <input id="the_form_submit" type="submit" value="Do the thing" class="submit-button" />
+      </form>
+      <div id="file_info"></div>
+
+      <!--<p>&nbsp;</p>
+      <p>Add this to the bottom of the velocity script token:</p>
+      <p>
+        <pre><code class="autoselect">#set ( $output = "" )
+#foreach( $employer in $employerData )
+  #if( $lead.Email.toString().equals($employer.Email) )
+    #foreach( $apprentice in $employer.Apprentices )
+      #set ( $output = "${output}&lt;p&gt;Student name: &lt;strong&gt;${apprentice.name}&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Outstanding units: &lt;/p&gt;&lt;ul&gt;" )
+      #foreach( $unit in $apprentice.units )
+        #set ( $unitTitle = "")
+        #foreach( $unitItem in $allUnits)
+          #if ( $unit.toString().equals($unitItem.code) ) 
+            #set ( $unitTitle = "${unitItem.title}")
+          #end
+        #end
+        #set ( $output = "${output}&lt;li&gt;${unit}: ${unitTitle}&lt;/li&gt;" )
+      #end
+      #set ( $output = "${output}&lt;/ul&gt;&lt;br&gt;" )
+    #end
+  #end
+#end
+$output##</code></pre>
+      </p>-->
+    </div>
+    <!--<p>Output:</p>
+    <div class="jumbotron" id="velocity-output">
+    </div>-->
+
+  </div>
+
+  <script src="papaparse.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
