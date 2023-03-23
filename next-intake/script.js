@@ -1,7 +1,3 @@
-var leadData = [];
-var wtsData = [];
-
-
 function generateOutput(data) {
   var unitsSummary = [];
   var velOutput = [];
@@ -43,27 +39,80 @@ function generateOutput(data) {
   //outputToDom(velOutput, unitsSummary);
 }
 
+function formatWtsData(inputData) {
+  var outputData = [];
+  // Course ID, Course Code, Course Title, Course Sub Title, Website URL, [Delivery Mode, Region, Location, Start Date, Starts Anytime]
+  // Course Status: Active, Internal use only: No, Show on Internet: Yes, Status: Admission||Open, 
+
+  for (i=0; i<inputData.length; i++) {
+
+    var courseID = inputData[i]["Course ID"];
+    var courseCode = inputData[i]["Course Code"];
+    var courseTitle = inputData[i]["Course Title"];
+    var courseSubTitle = inputData[i]["Course Sub Title"];
+    var courseURL = inputData[i]["Website URL"];
+    var location = inputData[i]["Location"];
+/*    var courseLocation = inputData[i]["Location"];
+    var courseStudyMode = inputData[i]["Study Mode"];*/
+    
+    //console.log(wtsPublish || !courseStatus || internalOnly || showOnInternet || !wtsStatus);
+    if (inputData[i]["Publish"] == "No") {continue}
+    if (!inputData[i]["Course Status"] == "Active") {continue}
+    if (inputData[i]["Internal use only"] == "Yes") {continue}
+    if (inputData[i]["Show on Internet"] == "No") {continue}
+    if (!(inputData[i]["Status"] == "Admission" || inputData[i]["Status"] == "Open")) {continue}
+
+   // console.log(inputData[i]["WTS Unique Identifier"]);
+
+
+    if (outputData.find(o => o["course id"] === courseID)) { // check for existing ones 
+      var existingCourse = outputData.find(o => o["course id"] === courseID); 
+      existingCourse.locations.push(location);
+      /*if (!existingCourse["study modes"].includes(courseStudyMode)) {
+        existingCourse["study modes"].push(courseStudyMode);
+      }*/
+    } else {
+      outputData.push({
+        "course id": courseID,
+        "course code": courseCode,
+        "course title": courseTitle,
+        "course sub title": courseSubTitle,
+        "course url": courseURL,
+        "locations": [location]
+      });
+    }
+  }
+  
+  console.log(outputData);
+  return outputData;
+}
+
 
 // handle form submit
 document.getElementById('the_form_submit').addEventListener('click', () => {
+  var leadData = [];
+  var wtsData;
+
   // lead data
-  Papa.parse(document.getElementById('the_file').files[0],{
+  /*Papa.parse(document.getElementById('the_file').files[0],{
     download: true,
     header: true,
     skipEmptyLines: true,
     complete: function(results){
-      generateOutput(results.data);
+      leadData.push(results.data);
     }
-  });
+  });*/
+
   // wts data
   Papa.parse(document.getElementById('the_course_data').files[0],{
     download: true,
     header: true,
     skipEmptyLines: true,
     complete: function(results){
-      generateOutput(results.data);
+      wtsData = formatWtsData(results.data);
     }
   });
+  //console.log(wtsData);
 });
 
 
