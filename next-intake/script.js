@@ -1,43 +1,4 @@
-function generateOutput(data) {
-  var unitsSummary = [];
-  var velOutput = [];
-  
-  for (var i = 0; i < data.length; i++) { // looping through all uploaded data
-    var empEmail = data[i]["Employer Email"];
-    var apprentice = data[i]["Student Name"];
-    var unitCode = data[i]["Unit Code"];
-    var unitTitle = data[i]["Unit Study Package Full Title"];
-    
-    if (velOutput.find(o => o["Email"] === empEmail)) { // check for existing emplployers 
-      var existingEmployer = velOutput.find(o => o["Email"] === empEmail); 
-      
-      if (existingEmployer.Apprentices.find(o => o["name"] === apprentice)) { // check for apprentice and add unit only
-        var existingApprentice = existingEmployer.Apprentices.find(o => o["name"] === apprentice);
-        existingApprentice.units.push(unitCode);
-      } else { // if new apprentice add new
-        existingEmployer.Apprentices.push({"name":apprentice, "units": [unitCode]});
-      }
-      
-    } else { // add new employer if not exists
-      velOutput.push({
-        "Email": empEmail,
-        "Apprentices": [{
-          "name": apprentice,
-          "units": [unitCode]
-        }]
-      });
-    }
-    
-    if (!unitsSummary.find(o => o["code"] === unitCode)) { // add unit to unitsSummary if not exists
-      unitsSummary.push({
-        "code": unitCode,
-        "title": unitTitle
-      });
-    }
-    
-  }
-  //outputToDom(velOutput, unitsSummary);
-}
+var domOutput = document.getElementById("output");
 
 function formatWtsData(inputData) {
   var outputData = [];
@@ -45,158 +6,135 @@ function formatWtsData(inputData) {
   // Course Status: Active, Internal use only: No, Show on Internet: Yes, Status: Admission||Open, 
 
   for (i=0; i<inputData.length; i++) {
-
+    // set course variables
     var courseID = inputData[i]["Course ID"];
     var courseCode = inputData[i]["Course Code"];
     var courseTitle = inputData[i]["Course Title"];
     var courseSubTitle = inputData[i]["Course Sub Title"];
     var courseURL = inputData[i]["Website URL"];
-    var location = inputData[i]["Location"];
-/*    var courseLocation = inputData[i]["Location"];
-    var courseStudyMode = inputData[i]["Study Mode"];*/
+    var thisLocation = inputData[i]["Location"];
+    //var startDate = inputData[i]["Start Date"];
+    var startDate = inputData[i]['Displays as starts "any_time"'] == "Yes" ? "Starts anytime" : inputData[i]["Start Date"]; // Displays as starts "any_time" 
     
-    //console.log(wtsPublish || !courseStatus || internalOnly || showOnInternet || !wtsStatus);
+    // exit if wts not good
     if (inputData[i]["Publish"] == "No") {continue}
     if (!inputData[i]["Course Status"] == "Active") {continue}
     if (inputData[i]["Internal use only"] == "Yes") {continue}
     if (inputData[i]["Show on Internet"] == "No") {continue}
     if (!(inputData[i]["Status"] == "Admission" || inputData[i]["Status"] == "Open")) {continue}
-
-   // console.log(inputData[i]["WTS Unique Identifier"]);
-
-
-    if (outputData.find(o => o["course id"] === courseID)) { // check for existing ones 
+    
+    if (outputData.find(o => o["course id"] === courseID)) { // find existing course
       var existingCourse = outputData.find(o => o["course id"] === courseID); 
-      existingCourse.locations.push(location);
-      /*if (!existingCourse["study modes"].includes(courseStudyMode)) {
-        existingCourse["study modes"].push(courseStudyMode);
-      }*/
-    } else {
+      if (existingCourse.locations.hasOwnProperty(thisLocation)) { // add start date to exisiting location
+        existingCourse.locations[thisLocation].push(startDate);
+      } else { // create location and add start date
+        existingCourse.locations[thisLocation] = [startDate];
+      }
+    } else { // create new course if not exists
       outputData.push({
         "course id": courseID,
         "course code": courseCode,
         "course title": courseTitle,
         "course sub title": courseSubTitle,
         "course url": courseURL,
-        "locations": [location]
+        "locations": {
+          [thisLocation] : [ startDate ]
+        }
       });
     }
   }
-  
-  console.log(outputData);
   return outputData;
 }
 
 
-// handle form submit
-document.getElementById('the_form_submit').addEventListener('click', () => {
-  var leadData = [];
-  var wtsData;
+// generate output
+function generateCSVFile(courseData, leadData) {
+  if (!courseData.length || !leadData.length) {return};
 
-  // lead data
-  /*Papa.parse(document.getElementById('the_file').files[0],{
+  var csv = '"Email","First name","Last name","Student number","URL","Campus","Next intake date"\n';
+
+  leadData.forEach(function (lead) {
+
+    // get next intake date for course & campus
+    var leadNextIntakes = "";
+    var leadsCourse = courseData.find(o => o["course id"] === lead["TQOne ID"]);
+    
+    if (!leadsCourse) {
+      domOutput.innerHTML += `"${lead['Email']}", ${lead['First name']}, ${lead['Last name']}, ${lead['Student number']}, ${lead["TQOne URL"]}, ${lead['Campus']},<br>`;
+
+      return; 
+    } else if (!leadsCourse.locations.hasOwnProperty(lead["Campus"])) {
+      domOutput.innerHTML += `"${lead['Email']}", ${lead['First name']}, ${lead['Last name']}, ${lead['Student number']}, ${lead["TQOne URL"]}, ${lead['Campus']},<br>`;
+      return;
+    };
+    
+    leadNextIntakes = leadsCourse.locations[lead["Campus"]].sort(function (a, b) {
+      var dateA = new Date(a),
+        dateB = new Date(b);
+      if (dateB > dateA) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+
+    var addLine =
+    `"${lead['Email']}",${lead['First name']},${lead['Last name']},${lead['Student number']},${leadsCourse["course url"]},${lead['Campus']},${leadNextIntakes[0]}\n`;
+
+    csv += addLine;
+  });
+  
+  
+  var hiddenElement = document.createElement('a');
+  hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+  hiddenElement.target = '_blank';
+  hiddenElement.download = 'next-intake.csv';
+  hiddenElement.click();
+}
+
+var leadData = [];
+var wtsData = [];
+
+function setLeadData(data) {
+  leadData = data;
+
+  if (wtsData != [] ) { 
+    generateCSVFile(wtsData, leadData);
+  }
+}
+function setCourseData(data) {
+  wtsData = data;
+
+  if (leadData != []) {
+    generateCSVFile(wtsData, leadData);
+  }
+}
+
+function parseLeadData(input, callBack) {
+  Papa.parse(input, {
     download: true,
     header: true,
     skipEmptyLines: true,
-    complete: function(results){
-      leadData.push(results.data);
-    }
-  });*/
-
-  // wts data
-  Papa.parse(document.getElementById('the_course_data').files[0],{
-    download: true,
-    header: true,
-    skipEmptyLines: true,
-    complete: function(results){
-      wtsData = formatWtsData(results.data);
+    complete: function(results) {
+      callBack(results.data);
     }
   });
-  //console.log(wtsData);
-});
-
-
-
-
-
-
-
-// outputs file name in dom
-/*function fileInfo(e) {
-  var file = e.target.files[0];
-  if (file.name.split(".")[1].toUpperCase() != "CSV") {
-    alert('Invalid csv file !');
-    e.target.parentNode.reset();
-    return;
-  } else {
-    //console.log(this);
-    this.innerHTML = "<p>File Name: " + file.name + " | " + file.size + " Bytes.</p>";
-  }
-}*/
-
-//var inputElement = document.getElementById('the_file');
-//var outputDiv = document.getElementById("velocity-output");
-
-/*
-function outputToDom(refactoredData, referenceList) {
-  var unitsRefOutput = JSON.stringify(referenceList, null, 2);
-  var objectOutput= JSON.stringify(refactoredData, null, 2);
-  //outputDiv.innerText = "#set( $allUnits = " + unitsRefOutput + " ) \n"+ "#set( $employerData = " + objectOutput + " )";
-
-  function selectElementText(el, win) {
-    win = win || window;
-    var doc = win.document, sel, range;
-    if (win.getSelection && doc.createRange) {
-        sel = win.getSelection();
-        range = doc.createRange();
-        range.selectNodeContents(el);
-        sel.removeAllRanges();
-        sel.addRange(range);
-    } else if (doc.body.createTextRange) {
-        range = doc.body.createTextRange();
-        range.moveToElementText(el);
-        range.select();
+}
+function parseCourseData(input, callBack) {
+  Papa.parse(input, {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results) {
+      callBack(formatWtsData(results.data));
     }
-  }
-  selectElementText(outputDiv);
-  outputDiv.scrollIntoView();
-
-}
-*/
-
-
-/*
-function onChange(event) {
-  var reader = new FileReader();
-  reader.onload = onReaderLoad;
-  reader.readAsText(event.target.files[0]);
-}
-function onReaderLoad(event) {
-  var obj = JSON.parse(event.target.result);
-  generateOutput(obj);
-}*/
-
-//document.getElementById('the_file').addEventListener('change', fileInfo, false);
-//document.getElementById('the_course_data').addEventListener('change', fileInfo, false);
-
-/**************** auto select */
-/*function SelectText(element) {
-  var text = element,
-      range,
-      selection;
-  if (document.body.createTextRange) {
-      range = document.body.createTextRange();
-      range.moveToElementText(text);
-      range.select();
-  } else if (window.getSelection) {
-      selection = window.getSelection();        
-      range = document.createRange();
-      range.selectNodeContents(text);
-      selection.removeAllRanges();
-      selection.addRange(range);
-  }
+  });
 }
 
-document.querySelector('.autoselect').addEventListener('click', function() {
-  SelectText(this);
-});*/
+// handle form submit
+document.getElementById('the_form_submit').addEventListener('click', function() {
+  parseLeadData(document.getElementById('the_file').files[0], setLeadData);
+  parseCourseData(document.getElementById('the_course_data').files[0], setCourseData);  
+  
+  //generateCSVFile(wtsData, leadData);
+});
