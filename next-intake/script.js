@@ -52,6 +52,7 @@ function generateCSVFile(courseData, leadData) {
   if (!courseData.length || !leadData.length) {return};
 
   var csv = '"Email","First name","Last name","Student number","URL","Campus","Next intake date"\n';
+  var csvDump = [];
 
   leadData.forEach(function (lead) {
 
@@ -59,14 +60,10 @@ function generateCSVFile(courseData, leadData) {
     var leadNextIntakes = "";
     var leadsCourse = courseData.find(o => o["course id"] === lead["TQOne ID"]);
     
-    if (!leadsCourse) {
-      domOutput.innerHTML += `"${lead['Email']}", ${lead['First name']}, ${lead['Last name']}, ${lead['Student number']}, ${lead["TQOne URL"]}, ${lead['Campus']},<br>`;
-
+    if (!leadsCourse || !leadsCourse.locations.hasOwnProperty(lead["Campus"])) {
+      csvDump.push(lead);
       return; 
-    } else if (!leadsCourse.locations.hasOwnProperty(lead["Campus"])) {
-      domOutput.innerHTML += `"${lead['Email']}", ${lead['First name']}, ${lead['Last name']}, ${lead['Student number']}, ${lead["TQOne URL"]}, ${lead['Campus']},<br>`;
-      return;
-    };
+    }
     
     leadNextIntakes = leadsCourse.locations[lead["Campus"]].sort(function (a, b) {
       var dateA = new Date(a),
@@ -90,6 +87,15 @@ function generateCSVFile(courseData, leadData) {
   hiddenElement.target = '_blank';
   hiddenElement.download = 'next-intake.csv';
   hiddenElement.click();
+
+  //domOutput.innerHTML = Papa.unparse(csvDump);
+
+  var nonMatchesElement = document.createElement('a');
+  nonMatchesElement.href = 'data:text/csv;charset=utf-8,' + Papa.unparse(csvDump);
+  nonMatchesElement.target = '_blank';
+  nonMatchesElement.download = 'next-intake--non-matches.csv';
+  nonMatchesElement.click();
+
 }
 
 var leadData = [];
