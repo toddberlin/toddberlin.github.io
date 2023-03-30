@@ -91,7 +91,9 @@ function generateCSVFile(courseData, leadData) {
   //domOutput.innerHTML = Papa.unparse(csvDump);
 
   var nonMatchesElement = document.createElement('a');
-  nonMatchesElement.href = 'data:text/csv;charset=utf-8,' + Papa.unparse(csvDump);
+  nonMatchesElement.href = 'data:text/csv;charset=utf-8,' + Papa.unparse(csvDump, {
+    skipEmptyLines: true
+  });
   nonMatchesElement.target = '_blank';
   nonMatchesElement.download = 'next-intake--non-matches.csv';
   nonMatchesElement.click();
