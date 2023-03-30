@@ -51,7 +51,7 @@ function formatWtsData(inputData) {
 function generateCSVFile(courseData, leadData) {
   if (!courseData.length || !leadData.length) {return};
 
-  var csv = '"Email","First name","Last name","Student number","URL","Campus","Next intake date"\n';
+  var csv = [];
   var csvDump = [];
 
   leadData.forEach(function (lead) {
@@ -75,15 +75,18 @@ function generateCSVFile(courseData, leadData) {
       }
     });
 
-    var addLine =
-    `"${lead['Email']}",${lead['First name']},${lead['Last name']},${lead['Student number']},${leadsCourse["course url"]},${lead['Campus']},${leadNextIntakes[0]}\n`;
+    // var addLine = `"${lead['Email']}",${lead['First name']},${lead['Last name']},${lead['Student number']},${leadsCourse["course url"]},${lead['Campus']},${leadNextIntakes[0]}\n`;
 
-    csv += addLine;
+    var newLead = lead;
+    newLead["Next intake date"] = leadNextIntakes[0];
+    csv.push(newLead);
   });
   
   
   var hiddenElement = document.createElement('a');
-  hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+  hiddenElement.href = 'data:text/csv;charset=utf-8,' + Papa.unparse(csv, {
+    skipEmptyLines: true
+  });
   hiddenElement.target = '_blank';
   hiddenElement.download = 'next-intake.csv';
   hiddenElement.click();
