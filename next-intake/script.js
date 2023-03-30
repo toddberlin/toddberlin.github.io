@@ -55,16 +55,16 @@ function generateCSVFile(courseData, leadData) {
   var csvDump = [];
 
   leadData.forEach(function (lead) {
-
-    // get next intake date for course & campus
     var leadNextIntakes = "";
     var leadsCourse = courseData.find(o => o["course id"] === lead["TQOne ID"]);
     
+    // exit if the course or campus doesn't exist
     if (!leadsCourse || !leadsCourse.locations.hasOwnProperty(lead["Campus"])) {
       csvDump.push(lead);
       return; 
     }
-    
+
+    // get next intake date for course & campus
     leadNextIntakes = leadsCourse.locations[lead["Campus"]].sort(function (a, b) {
       var dateA = new Date(a),
         dateB = new Date(b);
@@ -105,15 +105,13 @@ var wtsData = [];
 
 function setLeadData(data) {
   leadData = data;
-
-  if (wtsData != [] ) { 
+  if (wtsData.length) { 
     generateCSVFile(wtsData, leadData);
   }
 }
 function setCourseData(data) {
   wtsData = data;
-
-  if (leadData != []) {
+  if (leadData.length) {
     generateCSVFile(wtsData, leadData);
   }
 }
