@@ -1,5 +1,71 @@
-var inputElement = document.getElementById('fileItem');
+function fileInfo(e) {
+  var file = e.target.files[0];
+  if (file.name.split(".")[1].toUpperCase() != "CSV") {
+    alert('Invalid csv file !');
+    e.target.parentNode.reset();
+    return;
+  } else {
+    document.getElementById('file_info').innerHTML = "<p>File Name: " + file.name + " | " + file.size +
+      " Bytes.</p>";
+  }
+}
+
 var outputDiv = document.getElementById("velocity-output");
+
+
+
+
+
+/*
+// generate output 
+function generateCSVDownload(data) {
+  //if both not filled yet, exit 
+  if (!data.length || !leadData.length) {return};
+
+  var csv = [];
+  var csvDump = [];
+
+  leadData.forEach(function (lead) {
+    var leadNextIntakes = "";
+    var leadsCourse = data.find(o => o["course id"] === lead["TQOne ID"]);
+    
+    // exit if the course or campus doesn't exist, add to DUMP array
+    if (!leadsCourse || !leadsCourse.locations.hasOwnProperty(lead["Campus"])) {
+      csvDump.push(lead);
+      return; 
+    }
+
+    // get next intake date for course & campus
+    leadNextIntakes = leadsCourse.locations[lead["Campus"]].sort(function (a, b) {
+      var dateA = new Date(a),
+        dateB = new Date(b);
+      if (dateB > dateA) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+    
+    // add to 'csv' keeper array with next date
+    var newLead = lead;
+    newLead["Next intake date"] = leadNextIntakes[0];
+    csv.push(newLead);
+  });
+  
+  
+  var hiddenElement = document.createElement('a');
+  hiddenElement.href = 'data:text/csv;charset=utf-8,' + Papa.unparse(csv, {
+    skipEmptyLines: true
+  });
+  hiddenElement.target = '_blank';
+  hiddenElement.download = 'next-intake.csv';
+  hiddenElement.click();
+
+  //domOutput.innerHTML = Papa.unparse(csvDump);
+}
+*/
+
+
 
 function outputToDom(refactoredData, referenceList) {
   var unitsRefOutput = JSON.stringify(referenceList, null, 2);
@@ -23,10 +89,16 @@ function outputToDom(refactoredData, referenceList) {
   }
   selectElementText(outputDiv);
   outputDiv.scrollIntoView();
-
 }
 
-function generateOutput(data) {
+
+
+
+
+
+
+
+function generateVelocityOutput(data) {
   var unitsSummary = [];
   var velOutput = [];
 
@@ -62,20 +134,87 @@ function generateOutput(data) {
         "title": unitTitle
       });
     }
-
   }
+  //output marketo velocity
   outputToDom(velOutput, unitsSummary);
+
+  //build csv data
+  var csvOutput = [];
+  velOutput.forEach(function(emp) {
+    var ujData = [];
+    emp.Apprentices.forEach(function(app){
+      var appUnits = [];
+      app.units.forEach(function(unit) {
+        appUnits.push({"unit_code": unit, "unit_title": unitsSummary.find(o => o["code"]).title});
+      });
+      ujData.push({"apprentice_name": app.name, "units": appUnits});
+    });
+    csvOutput.push({"Email": emp.Email, "Miscellaneous JSON Data 1": ujData});
+  });
+
+  //console.log(csvOutput);
+  
+  //download new csv
+ var hiddenElement = document.createElement('a');
+  hiddenElement.href = 'data:text/csv;charset=utf-8,' + Papa.unparse(csvOutput, {
+    skipEmptyLines: true
+  });
+  hiddenElement.target = '_blank';
+  hiddenElement.download = 'next-intake.csv';
+  hiddenElement.click();
 }
 
+//{
+//	"apprentice_name": "Sammi B",
+//	"units": [{
+//			"unit_code": "CPCPCM2053",
+//			"unit_title": "Weld using metal arc welding equipment"
+//		},
+//		{
+//			"unit_code": "CPCCCA3018",
+//			"unit_title": "Construct, erect and dismantle formwork for stairs and ramps"
+//		}
+//	]
+//}
 
-function onChange(event) {
-  var reader = new FileReader();
-  reader.onload = onReaderLoad;
-  reader.readAsText(event.target.files[0]);
-}
-function onReaderLoad(event) {
-  var obj = JSON.parse(event.target.result);
-  generateOutput(obj);
+
+
+
+
+
+
+document.getElementById('the_file').addEventListener('change', fileInfo, false);
+
+document.getElementById('the_form_submit').addEventListener('click', () => {
+  Papa.parse(document.getElementById('the_file').files[0],{
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results){
+      generateVelocityOutput(results.data);
+      //generateCSVDownload(results.data);
+    }
+  });
+});
+
+/**************** auto select */
+function SelectText(element) {
+  var text = element,
+      range,
+      selection;
+  if (document.body.createTextRange) {
+      range = document.body.createTextRange();
+      range.moveToElementText(text);
+      range.select();
+  } else if (window.getSelection) {
+      selection = window.getSelection();        
+      range = document.createRange();
+      range.selectNodeContents(text);
+      selection.removeAllRanges();
+      selection.addRange(range);
+  }
 }
 
-inputElement.addEventListener('change', onChange);
+document.querySelector('.autoselect').addEventListener('click', function() {
+  SelectText(this);
+});

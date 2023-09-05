@@ -17,11 +17,17 @@
 
 <body>
   <div class="body-wrapper">
-    <h3>Use Chrome, not IE</h3>
+    <h3>UJ Data tool</h3>
+      <h5>Use Chrome, not IE</h5>
+    <p class="version">Version 2.0</p>
     <ol>
       <li>CSV should have the following column headings at a minimum: <code>Employer Email</code>, <code>Student
           Name</code>, <code>Unit Code</code>, <code>Unit Study Package Full Title</code></li>
-      <li>Upload the CSV file below to have the converted data output below and highlighted for copying into Marketo
+      <li>Upload the CSV file below and the following will be output:
+        <ol type="a">
+          <li>the converted data will be shown below and highlighted for copying into Marketo</li>
+          <li>a new, deduped csv will be downloaded which includes the data field for output on a Marketo landing page</li>
+        </ol>
       </li>
     </ol>
     <div class="jumbotron">
@@ -56,14 +62,14 @@
 $output##</code></pre>
       </p>
     </div>
-    <p>Output:</p>
+    <p>Marketo velocity output:</p>
     <div class="jumbotron" id="velocity-output">
     </div>
 
   </div>
 
   <script src="papaparse.min.js"></script>
-  <script src="script2.js"></script>
+  <script src="script.js"></script>
 </body>
 
 </html>
