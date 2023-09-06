@@ -12,61 +12,6 @@ function fileInfo(e) {
 
 var outputDiv = document.getElementById("velocity-output");
 
-
-
-
-
-/*
-// generate output 
-function generateCSVDownload(data) {
-  //if both not filled yet, exit 
-  if (!data.length || !leadData.length) {return};
-
-  var csv = [];
-  var csvDump = [];
-
-  leadData.forEach(function (lead) {
-    var leadNextIntakes = "";
-    var leadsCourse = data.find(o => o["course id"] === lead["TQOne ID"]);
-    
-    // exit if the course or campus doesn't exist, add to DUMP array
-    if (!leadsCourse || !leadsCourse.locations.hasOwnProperty(lead["Campus"])) {
-      csvDump.push(lead);
-      return; 
-    }
-
-    // get next intake date for course & campus
-    leadNextIntakes = leadsCourse.locations[lead["Campus"]].sort(function (a, b) {
-      var dateA = new Date(a),
-        dateB = new Date(b);
-      if (dateB > dateA) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-    
-    // add to 'csv' keeper array with next date
-    var newLead = lead;
-    newLead["Next intake date"] = leadNextIntakes[0];
-    csv.push(newLead);
-  });
-  
-  
-  var hiddenElement = document.createElement('a');
-  hiddenElement.href = 'data:text/csv;charset=utf-8,' + Papa.unparse(csv, {
-    skipEmptyLines: true
-  });
-  hiddenElement.target = '_blank';
-  hiddenElement.download = 'next-intake.csv';
-  hiddenElement.click();
-
-  //domOutput.innerHTML = Papa.unparse(csvDump);
-}
-*/
-
-
-
 function outputToDom(refactoredData, referenceList) {
   var unitsRefOutput = JSON.stringify(referenceList, null, 2);
   var objectOutput= JSON.stringify(refactoredData, null, 2);
@@ -91,14 +36,8 @@ function outputToDom(refactoredData, referenceList) {
   outputDiv.scrollIntoView();
 }
 
-
-
-
-
-
-
-
-function generateVelocityOutput(data) {
+// generate both Velocity and csv output
+function generateOutput(data) {
   var unitsSummary = [];
   var velOutput = [];
 
@@ -149,13 +88,11 @@ function generateVelocityOutput(data) {
       });
       ujData.push({"apprentice_name": app.name, "units": appUnits});
     });
-    csvOutput.push({"Email": emp.Email, "Miscellaneous JSON Data 1": ujData});
+    csvOutput.push({"Email": emp.Email, "Miscellaneous JSON Data 1": `${JSON.stringify(ujData)}`}); // 
   });
-
-  //console.log(csvOutput);
   
   //download new csv
- var hiddenElement = document.createElement('a');
+  var hiddenElement = document.createElement('a');
   hiddenElement.href = 'data:text/csv;charset=utf-8,' + Papa.unparse(csvOutput, {
     skipEmptyLines: true
   });
@@ -191,8 +128,7 @@ document.getElementById('the_form_submit').addEventListener('click', () => {
     header: true,
     skipEmptyLines: true,
     complete: function(results){
-      generateVelocityOutput(results.data);
-      //generateCSVDownload(results.data);
+      generateOutput(results.data);
     }
   });
 });
