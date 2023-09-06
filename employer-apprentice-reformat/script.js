@@ -84,14 +84,16 @@ function generateOutput(data) {
     emp.Apprentices.forEach(function(app){
       var appUnits = [];
       app.units.forEach(function(unit) {
-        appUnits.push({"unit_code": unit, "unit_title": unitsSummary.find(o => o["code"]).title});
+        appUnits.push({"unit_code": unit, "unit_title": unitsSummary.find(o => o["code"] === unit).title });
       });
       ujData.push({"apprentice_name": app.name, "units": appUnits});
     });
     csvOutput.push({"Email": emp.Email, "Miscellaneous JSON Data 1": `${JSON.stringify(ujData)}`}); // 
+    //console.log(csvOutput);
   });
   
   //download new csv
+
   var hiddenElement = document.createElement('a');
   hiddenElement.href = 'data:text/csv;charset=utf-8,' + Papa.unparse(csvOutput, {
     skipEmptyLines: true
@@ -99,6 +101,7 @@ function generateOutput(data) {
   hiddenElement.target = '_blank';
   hiddenElement.download = 'next-intake.csv';
   hiddenElement.click();
+  
 }
 
 //{
