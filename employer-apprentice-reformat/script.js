@@ -10,7 +10,7 @@ function fileInfo(e) {
   }
 }
 
-var outputDiv = document.getElementById("velocity-output");
+/*var outputDiv = document.getElementById("velocity-output");
 
 function outputToDom(refactoredData, referenceList) {
   var unitsRefOutput = JSON.stringify(referenceList, null, 2);
@@ -34,7 +34,7 @@ function outputToDom(refactoredData, referenceList) {
   }
   selectElementText(outputDiv);
   outputDiv.scrollIntoView();
-}
+}*/
 
 // generate both Velocity and csv output
 function generateOutput(data) {
@@ -75,7 +75,7 @@ function generateOutput(data) {
     }
   }
   //output marketo velocity
-  outputToDom(velOutput, unitsSummary);
+  //outputToDom(velOutput, unitsSummary);
 
   //build csv data
   var csvOutput = [];
@@ -99,29 +99,10 @@ function generateOutput(data) {
     skipEmptyLines: true
   });
   hiddenElement.target = '_blank';
-  hiddenElement.download = 'next-intake.csv';
+  hiddenElement.download = 'uj-data--apprentices-per-employer.csv';
   hiddenElement.click();
   
 }
-
-//{
-//	"apprentice_name": "Sammi B",
-//	"units": [{
-//			"unit_code": "CPCPCM2053",
-//			"unit_title": "Weld using metal arc welding equipment"
-//		},
-//		{
-//			"unit_code": "CPCCCA3018",
-//			"unit_title": "Construct, erect and dismantle formwork for stairs and ramps"
-//		}
-//	]
-//}
-
-
-
-
-
-
 
 document.getElementById('the_file').addEventListener('change', fileInfo, false);
 

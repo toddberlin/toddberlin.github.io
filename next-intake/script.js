@@ -2,8 +2,6 @@ var domOutput = document.getElementById("output");
 
 function formatWtsData(inputData) {
   var outputData = [];
-  // Course ID, Course Code, Course Title, Course Sub Title, Website URL, [Delivery Mode, Region, Location, Start Date, Starts Anytime]
-  // Course Status: Active, Internal use only: No, Show on Internet: Yes, Status: Admission||Open, 
 
   for (i=0; i<inputData.length; i++) {
     // set course variables
@@ -13,8 +11,7 @@ function formatWtsData(inputData) {
     var courseSubTitle = inputData[i]["Course Sub Title"];
     var courseURL = inputData[i]["Website URL"];
     var thisLocation = inputData[i]["Location"];
-    //var startDate = inputData[i]["Start Date"];
-    var startDate = inputData[i]['Displays as starts "any_time"'] == "Yes" ? "Starts anytime" : inputData[i]["Start Date"]; // Displays as starts "any_time" 
+    var startDate = inputData[i]['Displays as starts "any_time"'] == "Yes" ? "Starts anytime" : inputData[i]["Start Date"];
     
     // exit if wts not good
     if (inputData[i]["Publish"] == "No") {continue}
@@ -46,9 +43,9 @@ function formatWtsData(inputData) {
   return outputData;
 }
 
-
-// generate output
+// generate output 
 function generateCSVFile(courseData, leadData) {
+  //if both not filled yet, exit 
   if (!courseData.length || !leadData.length) {return};
 
   var csv = [];
@@ -58,7 +55,7 @@ function generateCSVFile(courseData, leadData) {
     var leadNextIntakes = "";
     var leadsCourse = courseData.find(o => o["course id"] === lead["TQOne ID"]);
     
-    // exit if the course or campus doesn't exist
+    // exit if the course or campus doesn't exist, add to DUMP array
     if (!leadsCourse || !leadsCourse.locations.hasOwnProperty(lead["Campus"])) {
       csvDump.push(lead);
       return; 
@@ -74,9 +71,8 @@ function generateCSVFile(courseData, leadData) {
         return 1;
       }
     });
-
-    // var addLine = `"${lead['Email']}",${lead['First name']},${lead['Last name']},${lead['Student number']},${leadsCourse["course url"]},${lead['Campus']},${leadNextIntakes[0]}\n`;
-
+    
+    // add to 'csv' keeper array with next date
     var newLead = lead;
     newLead["Next intake date"] = leadNextIntakes[0];
     csv.push(newLead);
