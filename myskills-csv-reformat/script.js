@@ -183,11 +183,11 @@ function mapMySkillsData(data) {
       onlineSelection = "Y";
     } 
     var offsiteSelection = "N"; 
-    if (course["study modes"].some(x => x.toLowerCase().includes("mixed mode")) || course["delivery modes"].some(x => x.toLowerCase().includes("workplace"))) {
+    if (course["study modes"].some(x => x.toLowerCase().includes("mobile van")) || course["delivery modes"].some(x => x.toLowerCase().includes("workplace"))) {
       offsiteSelection = "Y";
     } 
     var blockSelection = "N"; 
-    if (course["study modes"].some(x => x.toLowerCase().includes("block"))) {
+    if (course["study modes"].some(x => x.toLowerCase().includes("block training"))) {
       blockSelection = "Y";
     } 
 
