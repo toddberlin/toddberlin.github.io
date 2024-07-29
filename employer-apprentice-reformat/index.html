@@ -17,12 +17,13 @@
 
 <body>
   <div class="body-wrapper">
-    <h3>Use Chrome, not IE</h3>
+    <h2>UJ Data tool</h2>
+      <h6>Use Chrome, not IE</h6>
+    <p class="version">Version 2.0</p>
     <ol>
       <li>CSV should have the following column headings at a minimum: <code>Employer Email</code>, <code>Student
           Name</code>, <code>Unit Code</code>, <code>Unit Study Package Full Title</code></li>
-      <li>Upload the CSV file below to have the converted data output below and highlighted for copying into Marketo
-      </li>
+      <li>Upload the CSV file below and a new, deduped csv will be downloaded which includes the data field for output either on a landing page or email.</li>
     </ol>
     <div class="jumbotron">
       <p>Upload your JSON file here: </p>
@@ -33,37 +34,34 @@
       <div id="file_info"></div>
 
       <p>&nbsp;</p>
-      <p>Add this to the bottom of the velocity script token:</p>
+      <p>Add this to a velocity script token for use in emails:</p>
       <p>
-        <pre><code class="autoselect">#set ( $output = "" )
-#foreach( $employer in $employerData )
-  #if( $lead.Email.toString().equals($employer.Email) )
-    #foreach( $apprentice in $employer.Apprentices )
-      #set ( $output = "${output}&lt;p&gt;Student name: &lt;strong&gt;${apprentice.name}&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Outstanding units: &lt;/p&gt;&lt;ul&gt;" )
-      #foreach( $unit in $apprentice.units )
-        #set ( $unitTitle = "")
-        #foreach( $unitItem in $allUnits)
-          #if ( $unit.toString().equals($unitItem.code) ) 
-            #set ( $unitTitle = "${unitItem.title}")
-          #end
-        #end
-        #set ( $output = "${output}&lt;li&gt;${unit}: ${unitTitle}&lt;/li&gt;" )
-      #end
-      #set ( $output = "${output}&lt;/ul&gt;&lt;br&gt;" )
-    #end
-  #end
+        <pre><code class="autoselect">#if( $lead.miscellaneousJSONData1.isEmpty() )
+#set( $lead.miscellaneousJSONData1 = '[]' )
 #end
-$output##</code></pre>
+#set( $apprenticeData = '#set( $apprenticeData = ' + $lead.miscellaneousJSONData1 + ')' )
+#evaluate( $apprenticeData )
+
+#if ($apprenticeData.size())
+  #foreach( $apprentice in $apprenticeData )
+    &lt;p&gt;Student name: &lt;strong&gt;${apprentice.apprentice_name}&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Outstanding units: &lt;/p&gt;&lt;ul&gt;
+    #foreach( $unit in $apprentice.units )
+      &lt;li&gt;&lt;a href="https://training.gov.au/Training/Details/${unit.unit_code}" target="_blank"&gt;${unit.unit_code}&lt;/a&gt;: ${unit.unit_title}&lt;/li&gt;
+    #end
+    &lt;/ul&gt;
+    #if( $foreach.hasNext ) &lt;hr&gt; #end
+  #end
+#end</code></pre>
       </p>
     </div>
-    <p>Output:</p>
+    <!--<p>Marketo velocity output:</p>
     <div class="jumbotron" id="velocity-output">
-    </div>
+    </div>-->
 
   </div>
 
   <script src="papaparse.min.js"></script>
-  <script src="script2.js"></script>
+  <script src="script.js"></script>
 </body>
 
 </html>

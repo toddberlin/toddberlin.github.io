@@ -1,16 +1,4 @@
-function fileInfo(e) {
-  var file = e.target.files[0];
-  if (file.name.split(".")[1].toUpperCase() != "CSV") {
-    alert('Invalid csv file !');
-    e.target.parentNode.reset();
-    return;
-  } else {
-    document.getElementById('file_info').innerHTML = "<p>File Name: " + file.name + " | " + file.size +
-      " Bytes.</p>";
-  }
-}
-
-//var inputElement = document.getElementById('the_file');
+var inputElement = document.getElementById('fileItem');
 var outputDiv = document.getElementById("velocity-output");
 
 function outputToDom(refactoredData, referenceList) {
@@ -79,7 +67,7 @@ function generateOutput(data) {
   outputToDom(velOutput, unitsSummary);
 }
 
-/*
+
 function onChange(event) {
   var reader = new FileReader();
   reader.onload = onReaderLoad;
@@ -88,39 +76,6 @@ function onChange(event) {
 function onReaderLoad(event) {
   var obj = JSON.parse(event.target.result);
   generateOutput(obj);
-}*/
-
-document.getElementById('the_file').addEventListener('change', fileInfo, false);
-
-document.getElementById('the_form_submit').addEventListener('click', () => {
-  Papa.parse(document.getElementById('the_file').files[0],{
-    download: true,
-    header: true,
-    skipEmptyLines: true,
-    complete: function(results){
-      generateOutput(results.data);
-    }
-  });
-});
-
-/**************** auto select */
-function SelectText(element) {
-  var text = element,
-      range,
-      selection;
-  if (document.body.createTextRange) {
-      range = document.body.createTextRange();
-      range.moveToElementText(text);
-      range.select();
-  } else if (window.getSelection) {
-      selection = window.getSelection();        
-      range = document.createRange();
-      range.selectNodeContents(text);
-      selection.removeAllRanges();
-      selection.addRange(range);
-  }
 }
 
-document.querySelector('.autoselect').addEventListener('click', function() {
-  SelectText(this);
-});
+inputElement.addEventListener('change', onChange);
