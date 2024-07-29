@@ -1,0 +1,46 @@
+body {
+  font-family:Arial;
+}
+textarea {
+  width:100%;
+  margin-top:20px;
+}
+p {
+  width:100%;
+}
+button {
+  margin-bottom:20px;
+}
+.wrapper {
+  margin:0 auto;
+  width:100%;
+  max-width:800px;
+}
+
+.input {
+  background: #ffffff;
+}
+
+.output {
+  background: #00000010;
+}
+
+.button {
+  display:block;
+  padding: 15px 50px;
+  margin:10px;
+  max-width: fit-content;
+  background:hsla(0,100%,31%,.9);
+  color:#FFFFFF;
+  opacity:0.9;
+  font-size:18px;
+  line-height:18px;
+  border-radius: 40px;
+}
+.button:active {
+  background:hsl(0,0%,15%);
+}
+#copy:hover, #reset:hover {
+  cursor:pointer;
+  opacity:1;
+}

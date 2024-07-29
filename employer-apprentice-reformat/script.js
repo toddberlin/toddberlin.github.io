@@ -75,6 +75,7 @@ function onChange(event) {
 }
 function onReaderLoad(event) {
   var obj = JSON.parse(event.target.result);
+  console.log("onReaderLoad function");
   generateOutput(obj);
 }
 
